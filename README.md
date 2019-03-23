@@ -5,7 +5,7 @@ This patch is designed to enable NVDEC functions on Linux installations of Plex 
 ## Requirements
 
 - Plex Media Server must be a least version 1.15.1.791
-- You must have a NVIDIA card and drivers installed with support for NVDEC
+- You must have a NVIDIA card and drivers installed with support for NVDEC (see https://developer.nvidia.com/video-encode-decode-gpu-support-matrix for a list of supported cards)
 
 ## Installation
 
