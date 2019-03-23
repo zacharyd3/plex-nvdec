@@ -1,8 +1,13 @@
 # Plex-NVDEC
 
-This patch is designed to enable NVDEC functions on Linux installations of Plex Media Server version 1.15.1.791 and later. This is a stopgap patch to enabel the feature until Plex officially support the feature natively.
+This patch is designed to enable NVDEC functions on Linux installations of Plex Media Server version 1.15.1.791 and later. This is a stopgap patch to enable the feature until Plex officially supports the feature natively.
 
-##Installation
+## Requirements
+
+-Plex Media Server must be a least version 1.15.1.791
+-You must have an NVIDIA card and drivers installed with support for NVDEC
+
+## Installation
 
 To install this patch perform the following:
 1. Copy the plex-nvdec-patch.sh to your Plex server
