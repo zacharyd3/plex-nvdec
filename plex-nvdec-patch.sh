@@ -1,7 +1,13 @@
 #!/bin/bash
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root or with sudo"
+pcheck=`tail -n 1 /usr/lib/plexmediaserver/Plex\ Transcoder`
+if [ "$pcheck" <> "##patched" ]; then
+  echo "Patch has already been applied!"
+  exit
+fi
+
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root or with sudo"
   exit
 fi
 
