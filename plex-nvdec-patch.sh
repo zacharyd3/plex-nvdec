@@ -1,19 +1,29 @@
 #!/bin/bash
 
-pcheck=`tail -n 1 /usr/lib/plexmediaserver/Plex\ Transcoder`
-if [ "$pcheck" <> "##patched" ]; then
-  echo "Patch has already been applied!"
-  exit
+#Get container ID.
+con="$(docker ps -aqf 'name=PlexMediaServer')"
+
+#Copy the files needed from Plex.
+docker cp $con:/usr/lib/plexmediaserver/Plex\ Transcoder "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder"
+
+#Check if the files already been patched.
+pcheck="$(tail -n 1 '/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder')"
+
+echo ""
+#echo $pcheck
+patched=##patched
+if [[ "$pcheck" == "$patched" ]]
+then
+	echo "Patch has already been applied!"
+	exit
+else
+	echo "<font color='green'><b>Applying hardware decode patch...</b></font>"
+	echo "<hr>"
 fi
 
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root or with sudo"
-  exit
-fi
+mv "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder" "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder2"
 
-mv /usr/lib/plexmediaserver/Plex\ Transcoder /usr/lib/plexmediaserver/Plex\ Transcoder2
-
-cat > /usr/lib/plexmediaserver/Plex\ Transcoder <<< '#!/bin/bash
+cat > "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder" <<< '#!/bin/bash
 marap=$(cut -c 10-14 <<<"$@")
 if [ $marap <> "mpeg4" ]; then
      exec /usr/lib/plexmediaserver/Plex\ Transcoder2 -hwaccel nvdec "$@"
@@ -23,4 +33,14 @@ fi
 
 ##patched'
 
-chmod +x /usr/lib/plexmediaserver/Plex\ Transcoder
+chmod +x "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder"
+chmod +x "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder2"
+
+docker cp "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder" $con:/usr/lib/plexmediaserver/Plex\ Transcoder
+docker cp "/mnt/user/Storage/Google Drive/Server Files/Plex Patch/Plex Transcoder2" $con:/usr/lib/plexmediaserver/Plex\ Transcoder2
+
+docker exec -i $con chmod +x "/usr/lib/plexmediaserver/Plex Transcoder"
+docker exec -i $con chmod +x "/usr/lib/plexmediaserver/Plex Transcoder2"
+
+
+echo "<font color='green'><b>Done!</b></font>"
