@@ -13,11 +13,12 @@ echo ""
 patched=##patched
 if [[ "$pcheck" == "$patched" ]]
 then
-	echo "Patch has already been applied!"
+        echo "<hr>"
+	echo "<font color='red'><b>Patch has already been applied!</b></font>"
 	exit
 else
-	echo "<font color='green'><b>Applying hardware decode patch...</b></font>"
 	echo "<hr>"
+	echo "<font color='green'><b>Applying hardware decode patch...</b></font>"
 fi
 
 #Copy the default transcoder as a backup
